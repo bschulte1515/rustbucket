@@ -2,7 +2,7 @@ use std::{env, process, error::Error};
 
 fn main() {
     let config = Config::build(env::args()).unwrap_or_else(|err| {
-        eprintln!("rusbucket encountered an error: {err}");
+        eprintln!("rustbucket encountered an error: {err}");
         process:exit(1);
     })
 
