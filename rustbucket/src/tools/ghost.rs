@@ -1,28 +1,33 @@
 use std::{
     io, 
     fs,
-    // path::{Path},    
+    path::PathBuf,    
 };
 
 
 pub fn run() -> io::Result<()> {
-    for entry in fs::read_dir(".")? {
+    let dir = ".";
+    for entry in fs::read_dir(dir)? {
         let entry = entry?;
         let path = entry.path();
 
         let metadata = fs::metadata(&path)?;
         
         if metadata.is_file() {
-            println!("Found file: {:?}", path); 
-        } else if metadata.is_dir() {
-            println!("Found dir: {:?}", path);
+            let mut new_path = String::from(".");
+            new_path.push_str(path.file_name().unwrap().to_str().unwrap());
+
+            let mut new_path_buf = PathBuf::new();
+            new_path_buf.push(dir);
+            new_path_buf.push(&new_path);
+                
+            fs::rename(path, new_path_buf)?; 
         }
-        // let entry = entry.file_name().to_os_string();
-        // println!("{:?}", entry);
-        // let old_path = entry.path().to_string_lossy().into_owned();
-        // let new_path = Path::new(".").join(&old_path).to_string_lossy().to_string();
-        
-        // println!("{} and now {}", old_path, new_path); 
+
+        /* Use this code if we want to recurisve ghost */
+        // else if metadata.is_dir() {
+        //     ...
+        // }
     }
     Ok(())
 }
