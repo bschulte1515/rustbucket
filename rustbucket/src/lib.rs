@@ -1,5 +1,5 @@
 mod tools;
-use tools::{clipboard, replaceboard, Tool};
+use tools::{clipboard, replaceboard, ghost, Tool};
 use std::{
     error::Error,
 };
@@ -9,6 +9,7 @@ fn check_tool(input: &str) -> Tool {
         "keylogger" => return Tool::Keylogger,
         "clipboard" => return Tool::Clipboard,
         "replaceboard" => return Tool::ReplaceBoard,
+        "ghost" => return Tool::Ghost,
         _ => return Tool::Invalid, 
     }
 }
@@ -28,8 +29,11 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
             "--list" => {
                 return Err("\n\nAvailable tools:
 - clipboard         Outputs the current clipboard
+- ghost             Changes files in the current directory to hidden
+- keylogger         Listens for keypresses for 10 seconds
 - replaceboard      Replaces the clipboard text
-- keylogger         Listens for keypresses for 10 seconds\n");
+");
+
             }
             _ => return Err("Invalid flag"),
         }
@@ -57,7 +61,8 @@ pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
 
         }
         Tool::Ghost => {
-            todo!("Please implement me!");
+            let _ = ghost::run()?;
+            return Ok(())
         }
         Tool::Invalid => {
             // Return an error if the tool is invalid
