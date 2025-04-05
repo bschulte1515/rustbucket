@@ -12,12 +12,12 @@ impl Config {
                 "-t" => {
                     if let Some(value) = arg.next() {
                         println!("Using tool {value}");
-                        return Config(  )
+                        return Config(
                     } else {
                         println!("Did not supply a tool name");
-                    }
+                    },
                 }
-                _ => println!("Invalid flag: {arg}");
+                _ => println!("Invalid flag: {arg}"),
             }
         }
     }
