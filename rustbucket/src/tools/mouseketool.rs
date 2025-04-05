@@ -1,6 +1,10 @@
-use enigo::{Enigo, MouseControllable};
+use std::{thread, time::Duration, error::Error};
+use rdev::{simulate, EventType};
 
-pub fn run() {
-    let mut enigo = Enigo::new();
-    enigo.mouse_move_to(500, 300); // Move mouse to (500, 300)
+pub fn run() -> Result<(), Box<dyn Error>> {
+    let event = EventType::MouseMove {x: 500.0, y: 300.0 };
+    simulate(&event)?;
+    
+    thread::sleep(Duration::from_millis(100)); // Give time for the move to register
+    Ok(())
 }
