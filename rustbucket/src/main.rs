@@ -1,13 +1,12 @@
-use std::{env, process, error::Error};
+use std::{env, process};
 
 fn main() {
-    let config = Config::build(env::args()).unwrap_or_else(|err| {
+    let tool = rustbucket::build(env::args()).unwrap_or_else(|err| {
         eprintln!("rustbucket encountered an error: {err}");
-        process:exit(1);
-    })
-
-    if let Err(e) = rustbucket::run() {
+        process::exit(1);
+    }); 
+    if let Err(e) = rustbucket::run(tool) {
         eprintln!("rustbucket encountered an error: {e}");
-        process:exit(1);
+        process::exit(1);
     }
 }
