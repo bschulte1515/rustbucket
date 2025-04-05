@@ -1,8 +1,12 @@
-mod keylogger;
-mod clipboard;
+// mod keylogger;
+pub mod clipboard;
+pub mod replaceboard;
+pub mod ghost;
 
 pub enum Tool {
     Keylogger,
     Clipboard,
-    Invalid
+    ReplaceBoard,
+    Ghost,
+    Invalid,
 }
