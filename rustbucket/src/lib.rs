@@ -15,6 +15,9 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
         match arg.as_str() {
             "-t" | "--tool" => {
                 if let Some(value) = args.next() {
+                    if value == Tool::Invalid {
+                        return Err("Invalid tool: {value}");
+                    }
                     return Ok(check_tool(value));
                 } else {
                     return Err("Did not supply a tool name");
