@@ -1,5 +1,5 @@
 mod tools;
-use tools::{keylogger, clipboard, replaceboard, Tool};
+use tools::{ghost, keylogger, clipboard, replaceboard, Tool};
 use std::{
     error::Error,
 };
