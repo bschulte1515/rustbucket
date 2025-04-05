@@ -11,6 +11,7 @@ fn check_tool(input: &str) -> Tool {
         "clipboard" => return Tool::Clipboard,
         "replaceboard" => return Tool::ReplaceBoard,
         "ghost" => return Tool::Ghost,
+        "obfuscate" => return Tool::Obufscate,
         _ => return Tool::Invalid, 
     }
 }
