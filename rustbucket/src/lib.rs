@@ -70,7 +70,7 @@ pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
             let _ = ghost::run()?;
         }
         Tool::Mouseketool => {
-            mouseketool::run();
+            let _ = mouseketool::run()?;
         } 
         Tool::Invalid => {
             // Return an error if the tool is invalid
