@@ -1,6 +1,7 @@
 mod tools;
-use tools::{ghost, keylogger, clipboard, replaceboard, Tool};
+use tools::{ghost, keylogger, clipboard, replaceboard, obfuscate, Tool};
 use std::{
+    io::{self, Write},
     error::Error,
 };
 
@@ -12,6 +13,44 @@ fn check_tool(input: &str) -> Tool {
         "ghost" => return Tool::Ghost,
         _ => return Tool::Invalid, 
     }
+}
+
+pub fn trim_trailing_newline(input: &mut String) {
+    if let Some('\n')=input.chars().next_back() {
+        input.pop();
+    }
+    if let Some('\r')=input.chars().next_back() {
+        input.pop();
+    }
+}
+
+pub fn get_filename() -> io::Result<String> {
+    let mut input = String::new();
+    let mut confirmation = String::new();
+    while confirmation.to_uppercase() != "Y" {
+        input.clear();
+        confirmation.clear();
+
+        print!("Enter the file you would like to obfuscate: ");
+        io::stdout().flush()?;
+        io::stdin().read_line(&mut input)?;
+        trim_trailing_newline(&mut input);
+
+        print!("You entered {input}, is this correct? (Y/N): ");
+        io::stdout().flush()?;
+        io::stdin().read_line(&mut confirmation)?;
+        trim_trailing_newline(&mut confirmation);
+
+        while confirmation.to_uppercase() != "Y" && confirmation.to_uppercase() != "N" {
+            confirmation.clear();
+            print!("Incorrect input, try again (Y/N): "); 
+            io::stdout().flush()?;
+            io::stdin().read_line(&mut confirmation)?;
+            trim_trailing_newline(&mut confirmation);
+        }
+    }
+
+    Ok(input)
 }
 
 pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static str> {
@@ -63,6 +102,11 @@ pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
         }
         Tool::Ghost => {
             let _ = ghost::run()?;
+            return Ok(())
+        }
+        Tool::Obufscate => {
+            let filename = get_filename()?;
+            let _ = obfuscate::run(filename)?;
             return Ok(())
         }
         Tool::Invalid => {
