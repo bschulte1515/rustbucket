@@ -1,11 +1,11 @@
 mod tools;
 use tools::Tool;
 
-fn check_tool(&input: str) -> Tool {
-    match value.as_str() {
-        "keylogger" => return Tool::Keylogger,
-        "clipboard" => return Tool::Clipboard,
-        _ => return Tool::Invalid, 
+fn check_tool(value: &str) -> Tool {
+    match value {
+        "keylogger" => Tool::Keylogger,
+        "clipboard" => Tool::Clipboard,
+        _ => Tool::Invalid, 
     }
 }
 
@@ -15,15 +15,16 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
         match arg.as_str() {
             "-t" | "--tool" => {
                 if let Some(value) = args.next() {
-                    if value == Tool::Invalid {
-                        return Err("Invalid tool: {value}");
+                    let tool = check_tool(&value);
+                    if matches!(tool, Tool::Invalid) {
+                        return Err("Invalid tool specified");
                     }
-                    return Ok(check_tool(value));
+                    return Ok(tool);
                 } else {
                     return Err("Did not supply a tool name");
                 }
             }
-            _ => return Err("Invalid flag: {arg}"),
+            _ => return Err("Invalid flag"),
         }
     }
     
