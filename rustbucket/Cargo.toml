@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 rdev = "0.5.1"
 arboard = "3"
+get_if_addrs = "0.5"

