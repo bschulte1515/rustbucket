@@ -23,6 +23,8 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
         match arg.as_str() {
             "generate" => {
                 payload::generate();
+            }
+            "listen" => {
                 listener::start();
             }
             "-t" | "--tool" => {
