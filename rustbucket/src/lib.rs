@@ -14,7 +14,7 @@ fn check_tool(input: &str) -> Tool {
         "replaceboard" => return Tool::ReplaceBoard,
         "ghost" => return Tool::Ghost,
         "mouseketool" => return Tool::Mouseketool,
-        "obfuscate" => return Tool::Obufscate,
+        "obfuscate" => return Tool::Obfuscate,
         _ => return Tool::Invalid, 
     }
 }
@@ -112,7 +112,7 @@ pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
         Tool::Mouseketool => {
             let _ = mouseketool::run()?;
         } 
-        Tool::Obufscate => {
+        Tool::Obfuscate => {
             let filename = get_filename()?;
             let _ = obfuscate::run(filename)?;
             return Ok(())
