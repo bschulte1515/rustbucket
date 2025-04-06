@@ -13,7 +13,7 @@ rustbucket is a utility complete with potential security exploits for security r
 
 ## Installation
 
-### Build the program
+### Build
 
 ```bash
 cd rustbucket
