@@ -20,7 +20,11 @@ pub fn trim_trailing_newline(input: &mut String) {
     }
 }
 
-fn get_confirmation(confirmation: &mut String) -> io::Result<()> {
+fn get_confirmation(input: &str, confirmation: &mut String) -> io::Result<()> {
+    print!("You entered {input}, is this correct? (Y/N): ");
+    io::stdout().flush()?;
+    io::stdin().read_line(confirmation)?;
+    trim_trailing_newline(confirmation);
     while confirmation.to_uppercase() != "Y" && confirmation.to_uppercase() != "N" {
         confirmation.clear();
         print!("Incorrect input, try again (Y/N): "); 
@@ -46,13 +50,8 @@ pub fn get_filename(recursive: bool) -> io::Result<String> {
         io::stdout().flush()?;
         io::stdin().read_line(&mut input)?;
         trim_trailing_newline(&mut input);
-
-        print!("You entered {input}, is this correct? (Y/N): ");
-        io::stdout().flush()?;
-        io::stdin().read_line(&mut confirmation)?;
-        trim_trailing_newline(&mut confirmation);
         
-        get_confirmation(&mut confirmation)?;
+        get_confirmation(&input, &mut confirmation)?;
     }
 
     Ok(input)
@@ -113,7 +112,14 @@ pub fn run() -> io::Result<()> {
     let mut confirmation = String::new();
     println!("Would you like to obfuscate recursively? (Y/N): ");
     io::stdout().flush()?;
-    get_confirmation(&mut confirmation)?;
+    while confirmation.to_uppercase() != "Y" && confirmation.to_uppercase() != "N" {
+        confirmation.clear();
+        print!("Incorrect input, try again (Y/N): "); 
+        io::stdout().flush()?;
+        io::stdin().read_line(&mut confirmation)?;
+        trim_trailing_newline(&mut confirmation);
+    }
+
     if confirmation.to_uppercase() == "Y" {
         let path_str = get_filename(true)?;
         let dir_path = Path::new(&path_str);
