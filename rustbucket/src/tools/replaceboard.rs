@@ -1,5 +1,4 @@
 use arboard::Clipboard;
-use std::io::{self, Write};
 
 pub fn run() -> Result<(), &'static str> {
     let mut clipboard = Clipboard::new().expect("Failed to open clipboard");

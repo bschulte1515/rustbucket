@@ -1,4 +1,3 @@
-mod listener;
 mod tools;
 use tools::{ghost, keylogger, clipboard, replaceboard, mouseketool, obfuscate, Tool};
 use std::{
@@ -56,45 +55,6 @@ pub fn get_filename() -> io::Result<String> {
     }
 
     Ok(input)
-}
-
-pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static str> {
-    args.next(); // Skip the first argument (usually the program name)
-    
-    while let Some(arg) = args.next() {
-        match arg.as_str() {
-            "generate" => {
-                // generator::generate();
-                todo!("Implement me!")
-            }
-            "listen" => {
-                listener::start();
-            }
-            "-t" | "--tool" => {
-                if let Some(value) = args.next() {
-                    return Ok(check_tool(&value));
-                } else {
-                    return Err("Did not supply a tool name");
-                }
-            }
-            "--list" => {
-                return Err("\n
-Available tools:
-- clipboard         Outputs the current clipboard
-- ghost             Changes files in the current directory to hidden
-- keylogger         Listens for keypresses and outputs them to a log file
-- mouseketool       Moves mouse to a random position every so often
-- replaceboard      Replaces the clipboard text
-");
-
-            }
-            _ => return Err("Invalid flag"),
-        }
-    }
-    
-    Err("
-No tool specified. Use -t or --tool to specify a tool
-Use --list to see a list of available tools")
 }
 
 pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
