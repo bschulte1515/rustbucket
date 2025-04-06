@@ -21,13 +21,28 @@ cargo build --release
 ```
 ### Install
 
+#### Linux/Mac
+
 ```bash
 bash install.sh
+```
+
+#### Windows
+
+```powershell
+install.bat
 ```
 
 ## Start Guide
 
 ### Tools
+
+- `clipboard` - This utility copies everything in the clipboard.
+- `ghost` - Hides the files in the current directory.
+- `keylogger` - Logs key presses.
+- `mouseketools` - Makes the mouse move slightly.
+- `obfuscate` - Prompts the user for a filename, and then heavily obfuscates the code.
+- `replaceboard` - Overwrites the clipboard.
 
 ## Members
 
