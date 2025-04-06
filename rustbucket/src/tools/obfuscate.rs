@@ -110,8 +110,10 @@ fn visit_dir(dir: &Path) -> io::Result<()> {
 
 pub fn run() -> io::Result<()> {
     let mut confirmation = String::new();
-    println!("Would you like to obfuscate recursively? (Y/N): ");
+    print!("Would you like to obfuscate recursively? (Y/N): ");
     io::stdout().flush()?;
+    io::stdin().read_line(&mut confirmation)?;
+    trim_trailing_newline(&mut confirmation);
     while confirmation.to_uppercase() != "Y" && confirmation.to_uppercase() != "N" {
         confirmation.clear();
         print!("Incorrect input, try again (Y/N): "); 
