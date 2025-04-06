@@ -11,6 +11,6 @@ pub enum Tool {
     ReplaceBoard,
     Ghost,
     Mouseketool,
-    Obufscate,
+    Obfuscate,
     Invalid,
 }
